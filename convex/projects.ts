@@ -74,6 +74,11 @@ export const renameProject= mutation({
   handler: async (ctx, args) => {
     const identity = await verifyAuth(ctx);
 
+    const trimmedName = args.name.trim();
+    if (!trimmedName) {
+      throw new Error("Project name cannot be empty");
+    }
+
     const project = await ctx.db.get("projects", args.id);
 
     if (!project) {
@@ -85,7 +90,7 @@ export const renameProject= mutation({
     }
 
     await ctx.db.patch("projects", args.id, {
-      name: args.name,
+      name: trimmedName,
       updatedAt: Date.now(),
     });
   }
