@@ -66,3 +66,32 @@ export const getById= query({
     return project;
   }
 })
+export const renameProject= mutation({
+  args: {
+    id: v.id("projects"),
+    name: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const identity = await verifyAuth(ctx);
+
+    const trimmedName = args.name.trim();
+    if (!trimmedName) {
+      throw new Error("Project name cannot be empty");
+    }
+
+    const project = await ctx.db.get("projects", args.id);
+
+    if (!project) {
+      throw new Error("Project not found");
+    }
+
+    if(project.ownerId !== identity.subject) {
+      throw new Error("Unauthorized access to this project.");
+    }
+
+    await ctx.db.patch("projects", args.id, {
+      name: trimmedName,
+      updatedAt: Date.now(),
+    });
+  }
+})
