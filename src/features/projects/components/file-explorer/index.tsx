@@ -5,6 +5,10 @@ import { ChevronRightIcon, CopyMinusIcon, FilePlusCornerIcon, FolderPlusIcon } f
 import { cn } from "@/lib/utils";
 import { useProject } from "../../hooks/use-projects";
 import { Button } from "@/components/ui/button";
+import { useCreateFile, useCreateFolder, useFolderContents } from "../../hooks/use-files";
+import { CreateInput } from "./create-input";
+import { LoadingRow } from "./loading-row";
+import { Tree } from "./tree";
 
 export const FileExplorer = ({
   projectId
@@ -19,6 +23,31 @@ export const FileExplorer = ({
 
 
   const project = useProject(projectId);
+  const rootFiles = useFolderContents({
+    projectId,
+    enabled: isOpen,
+  });
+  const createFile = useCreateFile();
+  const createFolder = useCreateFolder();
+
+  const handleCreate = (name: string) => {
+    setCreating(null);
+
+    if (creating === "file") {
+      createFile({
+        projectId,
+        name,
+        content: "",
+        parentId: undefined,
+      });
+    } else {
+      createFolder({
+        projectId,
+        name,
+        parentId: undefined,
+      });
+    }
+  };
 
 
   return (
@@ -40,13 +69,13 @@ export const FileExplorer = ({
           </p>
 
           <div className="opacity-0 group-hover/project:opacity-100 transition-none duration-0 flex items-center gap-0.5 ml-auto">
-          {/* Create file button */}
+            {/* Create file button */}
             <Button
               onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
                 setIsOpen(true);
-                // setCreating("file");
+                setCreating("file");
               }}
               variant="highlight"
               size="icon-xs"
@@ -59,7 +88,7 @@ export const FileExplorer = ({
                 e.stopPropagation();
                 e.preventDefault();
                 setIsOpen(true);
-                // setCreating("folder");
+                setCreating("folder");
               }}
               variant="highlight"
               size="icon-xs"
@@ -80,6 +109,28 @@ export const FileExplorer = ({
             </Button>
           </div>
         </div>
+
+        {isOpen && (
+          <>
+            {rootFiles === undefined && <LoadingRow level={0} />}
+            {creating && (
+              <CreateInput
+                type={creating}
+                level={0}
+                onSubmit={handleCreate}
+                onCancel={() => setCreating(null)}
+              />
+            )}
+            {rootFiles?.map((item) => (
+              <Tree
+                key={`${item._id}-${collapseKey}`}
+                item={item}
+                level={0}
+                projectId={projectId}
+              />
+            ))}
+          </>
+        )}
       </ScrollArea>
     </div>
   )
