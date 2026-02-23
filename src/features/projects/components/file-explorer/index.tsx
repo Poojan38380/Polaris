@@ -112,7 +112,7 @@ export const FileExplorer = ({
 
         {isOpen && (
           <>
-            {rootFiles === undefined && <LoadingRow level={0} />}
+            {rootFiles === undefined && !creating &&  <LoadingRow level={0} />}
             {creating && (
               <CreateInput
                 type={creating}
