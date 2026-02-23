@@ -12,12 +12,50 @@ const suggestionSchema = z.object({
     ),
 });
 
+function detectLanguage(fileName: string): string {
+  const ext = fileName.toLowerCase().split('.').pop() || '';
+  const languageMap: Record<string, string> = {
+    'ts': 'TypeScript',
+    'tsx': 'TypeScript React',
+    'js': 'JavaScript',
+    'jsx': 'JavaScript React',
+    'py': 'Python',
+    'java': 'Java',
+    'cpp': 'C++',
+    'c': 'C',
+    'cs': 'C#',
+    'go': 'Go',
+    'rs': 'Rust',
+    'rb': 'Ruby',
+    'php': 'PHP',
+    'swift': 'Swift',
+    'kt': 'Kotlin',
+    'scala': 'Scala',
+    'html': 'HTML',
+    'css': 'CSS',
+    'scss': 'SCSS',
+    'sass': 'Sass',
+    'json': 'JSON',
+    'xml': 'XML',
+    'yaml': 'YAML',
+    'yml': 'YAML',
+    'md': 'Markdown',
+    'sql': 'SQL',
+    'sh': 'Shell',
+    'bash': 'Bash',
+    'vue': 'Vue',
+    'svelte': 'Svelte',
+  };
+  return languageMap[ext] || 'unknown';
+}
+
 const SUGGESTION_PROMPT = `You are an AI-powered inline code completion engine for a code editor (similar to GitHub Copilot).
 
 Your job is to predict and suggest the next few characters, tokens, or lines that the developer is likely to type at the cursor position.
 
 <context>
 <file_name>{fileName}</file_name>
+<language>{language}</language>
 <line_number>{lineNumber}</line_number>
 <previous_lines>
 {previousLines}
@@ -37,13 +75,14 @@ Your job is to predict and suggest the next few characters, tokens, or lines tha
 Your task is to continue the code exactly at the cursor position (immediately after text_before_cursor).
 
 Use the following context to infer developer intent:
+- file_name: The name of the file being edited
+- language: The detected programming language (use idiomatic patterns for this language when relevant, but rely primarily on the actual code context)
 - previous_lines: What was written before the current line
 - current_line: The line where the cursor is located
 - text_before_cursor: Everything on the current line up to the cursor
 - text_after_cursor: Everything on the current line after the cursor
 - next_lines: Code that exists below the current line
 - full_code: The entire file content for broader context
-- file_name: Helps identify the programming language and conventions
 
 Guidelines:
 1. ALWAYS try to suggest something useful unless the cursor is in a truly ambiguous position (e.g., empty whitespace with no clear intent).
@@ -115,8 +154,11 @@ export async function POST(request: Request) {
       );
     }
 
+    const language = detectLanguage(fileName);
+    
     const prompt = SUGGESTION_PROMPT
       .replace("{fileName}", fileName)
+      .replace("{language}", language)
       .replace("{code}", code)
       .replace("{currentLine}", currentLine)
       .replace("{previousLines}", previousLines || "")
