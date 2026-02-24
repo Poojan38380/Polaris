@@ -40,7 +40,7 @@ import {
 
 import { Id } from "../../../../convex/_generated/dataModel";
 import { DEFAULT_CONVERSATION_TITLE } from "../constants";
-// import { PastConversationsDialog } from "./past-conversations-dialog";
+import { PastConversationsDialog } from "./past-conversations-dialog";
 
 interface ConversationSidebarProps {
   projectId: Id<"projects">;
@@ -131,12 +131,12 @@ export const ConversationSidebar = ({
 
   return (
     <>
-      {/* <PastConversationsDialog
+      <PastConversationsDialog
         projectId={projectId}
         open={pastConversationsOpen}
         onOpenChange={setPastConversationsOpen}
         onSelect={setSelectedConversationId}
-      /> */}
+      />
       <div className="flex flex-col h-full bg-sidebar">
         <div className="h-8.75 flex items-center justify-between border-b">
           <div className="text-sm truncate pl-3">

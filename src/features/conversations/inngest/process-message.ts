@@ -1,4 +1,4 @@
-import { createAgent, anthropic, createNetwork } from '@inngest/agent-kit';
+import { createAgent, createNetwork, gemini } from '@inngest/agent-kit';
 
 import { inngest } from "@/inngest/client";
 import { Id } from "../../../../convex/_generated/dataModel";
@@ -10,8 +10,8 @@ import {
   TITLE_GENERATOR_SYSTEM_PROMPT
 } from "./constants";
 import { DEFAULT_CONVERSATION_TITLE } from "../constants";
-// import { createReadFilesTool } from './tools/read-files';
-// import { createListFilesTool } from './tools/list-files';
+import { createListFilesTool } from './tools/list-files';
+import { createReadFilesTool } from './tools/read-files';
 // import { createUpdateFileTool } from './tools/update-file';
 // import { createCreateFilesTool } from './tools/create-files';
 // import { createCreateFolderTool } from './tools/create-folder';
@@ -62,6 +62,11 @@ export const processMessage = inngest.createFunction(
       projectId,
       message
     } = event.data as MessageEvent;
+
+    const googleApiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY;
+    if (!googleApiKey) {
+      throw new NonRetriableError("GOOGLE_GENERATIVE_AI_API_KEY is not configured");
+    }
 
     const internalKey = process.env.POLARIS_CONVEX_INTERNAL_KEY; 
 
@@ -117,9 +122,10 @@ export const processMessage = inngest.createFunction(
        const titleAgent = createAgent({
         name: "title-generator",
         system: TITLE_GENERATOR_SYSTEM_PROMPT,
-        model: anthropic({
-          model: "claude-3-5-haiku-latest",
-          defaultParameters: { temperature: 0, max_tokens: 50 },
+        model: gemini({
+          model: "gemini-2.5-flash",
+          apiKey: googleApiKey,
+          defaultParameters: {  },
         }),
        });
 
@@ -155,13 +161,14 @@ export const processMessage = inngest.createFunction(
       name: "polaris",
       description: "An expert AI coding assistant",
       system: systemPrompt,
-       model: anthropic({
+       model: gemini({
         model: "gemini-2.5-flash",
-        defaultParameters: { temperature: 0.3, max_tokens: 16000 }
+        apiKey: googleApiKey,
+        defaultParameters: {  }
        }),
        tools: [
-        // createListFilesTool({ internalKey, projectId }),
-        // createReadFilesTool({ internalKey }),
+        createListFilesTool({ internalKey, projectId }),
+        createReadFilesTool({ internalKey }),
         // createUpdateFileTool({ internalKey }),
         // createCreateFilesTool({ projectId, internalKey }),
         // createCreateFolderTool({ projectId, internalKey }),
