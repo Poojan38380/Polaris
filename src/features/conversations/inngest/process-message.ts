@@ -12,12 +12,12 @@ import {
 import { DEFAULT_CONVERSATION_TITLE } from "../constants";
 import { createListFilesTool } from './tools/list-files';
 import { createReadFilesTool } from './tools/read-files';
-// import { createUpdateFileTool } from './tools/update-file';
-// import { createCreateFilesTool } from './tools/create-files';
-// import { createCreateFolderTool } from './tools/create-folder';
-// import { createRenameFileTool } from './tools/rename-file';
-// import { createDeleteFilesTool } from './tools/delete-files';
-// import { createScrapeUrlsTool } from './tools/scrape-urls';
+import { createUpdateFileTool } from './tools/update-file';
+import { createCreateFilesTool } from './tools/create-files';
+import { createCreateFolderTool } from './tools/create-folder';
+import { createRenameFileTool } from './tools/rename-file';
+import { createScrapeUrlsTool } from './tools/scrape-urls';
+import { createDeleteFilesTool } from './tools/delete-files';
 
 interface MessageEvent {
   messageId: Id<"messages">;
@@ -169,12 +169,12 @@ export const processMessage = inngest.createFunction(
        tools: [
         createListFilesTool({ internalKey, projectId }),
         createReadFilesTool({ internalKey }),
-        // createUpdateFileTool({ internalKey }),
-        // createCreateFilesTool({ projectId, internalKey }),
-        // createCreateFolderTool({ projectId, internalKey }),
-        // createRenameFileTool({ internalKey }),
-        // createDeleteFilesTool({ internalKey }),
-        // createScrapeUrlsTool(),
+        createUpdateFileTool({ internalKey }),
+        createCreateFilesTool({ projectId, internalKey }),
+        createCreateFolderTool({ projectId, internalKey }),
+        createRenameFileTool({ internalKey }),
+        createScrapeUrlsTool(),
+        createDeleteFilesTool({ internalKey }),
        ],
     });
 
