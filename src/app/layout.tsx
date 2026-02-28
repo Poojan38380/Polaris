@@ -30,6 +30,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <meta name="apple-mobile-web-app-title" content="Forge" />
+      </head>
       <body
         className={`${inter.variable} ${plexMono.variable} antialiased`}
       >
