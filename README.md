@@ -145,15 +145,15 @@ flowchart LR
 
 ```bash
 # 1. Clone the repo
-git clone https://github.com/your-username/forge.git
+git clone https://github.com/Poojan38380/Forge.git
 cd forge
 
 # 2. Install dependencies
 npm install
 
 # 3. Set up environment variables
-cp .env.local.example .env.local
-# Fill in the values below in .env.local
+cp env.example .env.local
+# Fill in all the values — links to each service are in env.example
 
 # 4. Start the app
 npm run dev
