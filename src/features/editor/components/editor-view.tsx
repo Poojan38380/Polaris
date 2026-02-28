@@ -38,14 +38,15 @@ export const EditorView = ({ projectId }: { projectId: Id<"projects"> }) => {
       {activeTabId && <FileBreadcrumbs projectId={projectId} />}
       <div className="flex-1 min-h-0 bg-background">
         {!activeFile && (
-          <div className="size-full flex items-center justify-center">
+          <div className="size-full flex flex-col gap-2 items-center justify-center">
             <Image
               src="/logo-alt.svg"
-              alt="Polaris"
+              alt="Forge"
               width={50}
               height={50}
               className="opacity-25"
             />
+            <h3 className="text-2xl font-bold opacity-15">A Forge for Your Ideas</h3>
           </div>
         )}
         {isActiveFileText && (
