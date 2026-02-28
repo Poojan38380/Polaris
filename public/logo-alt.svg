@@ -1,3 +1,10 @@
-<svg width="40" height="48" viewBox="0 0 40 48" fill="none" xmlns="http://www.w3.org/2000/svg">
- <path d="M20 4V16.3604C20 19.087 16.6569 20.3998 14.8016 18.4017L7 10M40 24H27.6396C24.913 24 23.6002 20.6569 25.5983 18.8016L34 11M20 44V31.6396C20 28.913 23.3431 27.6002 25.1984 29.5983L33 38M0 24L12.3604 24C15.087 24 16.3998 27.3431 14.4017 29.1984L6 37" stroke="white" stroke-width="4"/>
- </svg>
+<svg width="48" height="40" viewBox="0 0 48 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Anvil top face: wide trapezoid -->
+  <path d="M4 20 L10 6 L44 6 L44 22 L4 22 Z" stroke="white" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+  <!-- Anvil horn (left protrusion) -->
+  <path d="M4 6 L10 6 L4 20 Z" stroke="white" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+  <!-- Anvil waist -->
+  <path d="M18 22 L18 30 L30 30 L30 22" stroke="white" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+  <!-- Anvil base plate -->
+  <path d="M12 30 L12 38 L36 38 L36 30" stroke="white" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+</svg>

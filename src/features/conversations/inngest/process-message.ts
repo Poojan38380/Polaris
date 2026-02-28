@@ -5,8 +5,8 @@ import { Id } from "../../../../convex/_generated/dataModel";
 import { NonRetriableError } from "inngest";
 import { convex } from "@/lib/convex-client";
 import { api } from "../../../../convex/_generated/api";
-import { 
-  CODING_AGENT_SYSTEM_PROMPT, 
+import {
+  CODING_AGENT_SYSTEM_PROMPT,
   TITLE_GENERATOR_SYSTEM_PROMPT
 } from "./constants";
 import { DEFAULT_CONVERSATION_TITLE } from "../constants";
@@ -56,8 +56,8 @@ export const processMessage = inngest.createFunction(
     event: "message/sent",
   },
   async ({ event, step }) => {
-    const { 
-      messageId, 
+    const {
+      messageId,
       conversationId,
       projectId,
       message
@@ -68,7 +68,7 @@ export const processMessage = inngest.createFunction(
       throw new NonRetriableError("GOOGLE_GENERATIVE_AI_API_KEY is not configured");
     }
 
-    const internalKey = process.env.POLARIS_CONVEX_INTERNAL_KEY; 
+    const internalKey = process.env.POLARIS_CONVEX_INTERNAL_KEY;
 
     if (!internalKey) {
       throw new NonRetriableError("POLARIS_CONVEX_INTERNAL_KEY is not configured");
@@ -119,24 +119,24 @@ export const processMessage = inngest.createFunction(
       conversation.title === DEFAULT_CONVERSATION_TITLE;
 
     if (shouldGenerateTitle) {
-       const titleAgent = createAgent({
+      const titleAgent = createAgent({
         name: "title-generator",
         system: TITLE_GENERATOR_SYSTEM_PROMPT,
         model: gemini({
           model: "gemini-2.5-flash",
           apiKey: googleApiKey,
-          defaultParameters: {  },
+          defaultParameters: {},
         }),
-       });
+      });
 
-       const { output } = await titleAgent.run(message, { step });
+      const { output } = await titleAgent.run(message, { step });
 
-       const textMessage = output.find(
+      const textMessage = output.find(
         (m) => m.type === "text" && m.role === "assistant"
       );
 
       if (textMessage?.type === "text") {
-         const title = 
+        const title =
           typeof textMessage.content === "string"
             ? textMessage.content.trim()
             : textMessage.content
@@ -158,15 +158,15 @@ export const processMessage = inngest.createFunction(
 
     // Create the coding agent with file tools
     const codingAgent = createAgent({
-      name: "polaris",
+      name: "forge",
       description: "An expert AI coding assistant",
       system: systemPrompt,
-       model: gemini({
+      model: gemini({
         model: "gemini-2.5-flash",
         apiKey: googleApiKey,
-        defaultParameters: {  }
-       }),
-       tools: [
+        defaultParameters: {}
+      }),
+      tools: [
         createListFilesTool({ internalKey, projectId }),
         createReadFilesTool({ internalKey }),
         createUpdateFileTool({ internalKey }),
@@ -175,12 +175,12 @@ export const processMessage = inngest.createFunction(
         createRenameFileTool({ internalKey }),
         createScrapeUrlsTool(),
         createDeleteFilesTool({ internalKey }),
-       ],
+      ],
     });
 
     // Create network with single agent
     const network = createNetwork({
-      name: "polaris-network",
+      name: "forge-network",
       agents: [codingAgent],
       maxIter: 20,
       router: ({ network }) => {
