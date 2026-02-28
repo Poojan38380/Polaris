@@ -3,7 +3,7 @@
   <h1>Forge</h1>
   <p><strong>Your AI coding partner. In the browser. No setup needed.</strong></p>
 
-  <a href="https://your-url-here">
+  <a href="https://forge-for-ideas.vercel.app">
     <img src="https://img.shields.io/badge/Try%20Forge-%E2%86%92-black?style=for-the-badge" alt="Try Forge" />
   </a>
   &nbsp;
