@@ -3,7 +3,7 @@
   <h1>Forge</h1>
   <p><strong>Your AI coding partner. In the browser. No setup needed.</strong></p>
 
-  <a href="https://your-url-here">
+  <a href="https://forge-for-ideas.vercel.app">
     <img src="https://img.shields.io/badge/Try%20Forge-%E2%86%92-black?style=for-the-badge" alt="Try Forge" />
   </a>
   &nbsp;
@@ -36,9 +36,11 @@ When you're done, Forge runs your app **live inside the browser** — you can se
 
 ### 1. Sign in & land on your dashboard
 
-Simple, clean authentication — then straight to your projects.
+A beautiful split-screen landing page — showcase on the left, sign-in on the right. Works great on mobile too.
 
-<img src="./public/images/simple-auth-interface.png" alt="Auth screen" width="48%" /> &nbsp; <img src="./public/images/main-home-screen.png" alt="Home screen" width="48%" />
+<img src="./public/images/home-page.png" alt="Forge home & auth page" width="100%" />
+
+<img src="./public/images/auth-mobile-view.png" alt="Forge auth — mobile view" width="48%" />
 
 ---
 
